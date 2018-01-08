@@ -5,9 +5,12 @@ import java.util.Optional;
 
 import de.codecentric.centerdevice.MenuToolkit;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
@@ -43,8 +46,25 @@ public class App extends Application
         final MenuToolkit tk = MenuToolkit.toolkit(Locale.getDefault());
         if (tk != null)
         {
+            //tk.setForceQuitOnCmdQ(false);
             final Menu applicationMenu = tk.createDefaultApplicationMenu("HelloWorld");
             tk.setApplicationMenu(applicationMenu);
+            
+            final MenuItem quitMenuItem = applicationMenu.getItems().listIterator().next();
+            System.out.println("quitMenuItem: " + quitMenuItem);
+
+            final EventHandler<ActionEvent> defaultAction = quitMenuItem.getOnAction();
+            quitMenuItem.setOnAction(new EventHandler<ActionEvent>() 
+            {
+                @Override
+                public void handle(
+                    final ActionEvent event) 
+                {
+                    System.out.println("handling quit " + event);
+                    defaultAction.handle(event);
+                }
+            });
+
         }
         else
         {
